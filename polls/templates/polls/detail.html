@@ -1,5 +1,9 @@
 <h1>{{ poll.question }}</h1>
 
+
+
+<div id="numlikes">{{ poll.likes }} likes</div>
+<a href="javascript:DoPost()">like</a>
 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
 
 <form action="{% url 'polls:vote' poll.id %}" method="post">
@@ -10,3 +14,15 @@
 {% endfor %}
 <input type="submit" value="Vote" />
 </form>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script>
+   function DoPost(){
+      $.post( "{% url 'polls:like' poll.id %}", { csrfmiddlewaretoken: '{{ csrf_token }}' }, 
+      function( data1 ) {
+          $.get( "{% url 'polls:likes' poll.id %}", function( data ) {
+              $( "#numlikes" ).html( data + " likes" );
+          });
+      });
+   }
+</script>

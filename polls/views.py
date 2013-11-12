@@ -46,3 +46,17 @@ def vote(request, poll_id):
         # with POST data. This prevents data from being posted twice if a
         # user hits the Back button.
         return HttpResponseRedirect(reverse('polls:results', args=(p.id,)))
+
+def like(request, poll_id):
+    print("hello1")
+    p = get_object_or_404(Poll, pk=poll_id)
+    if (request.method == "POST"):
+        print("hello")
+        p.likes += 1
+        p.save()
+    else:
+        print("bye")
+    return render(request, 'polls/detail.html', { 'poll': p })
+
+def likes(request, poll_id):
+    return HttpResponse(Poll.objects.get(pk=poll_id).likes)

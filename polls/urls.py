@@ -6,4 +6,6 @@ urlpatterns = patterns('',
     url(r'^(?P<pk>\d+)/$', views.DetailView.as_view(), name='detail'),
     url(r'^(?P<pk>\d+)/results/$', views.ResultsView.as_view(), name='results'),
     url(r'^(?P<poll_id>\d+)/vote/$', views.vote, name='vote'),
+    url(r'^(?P<poll_id>\d+)/like/$', views.like, name='like'),
+    url(r'^(?P<poll_id>\d+)/likes/$', views.likes, name='likes'),
 )
