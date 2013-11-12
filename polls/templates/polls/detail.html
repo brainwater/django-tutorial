@@ -4,6 +4,9 @@
 
 <div id="numlikes">{{ poll.likes }} likes</div>
 <a href="javascript:DoPost()">like</a>
+<br/>
+popularity =
+{{ poll.popularity }}
 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
 
 <form action="{% url 'polls:vote' poll.id %}" method="post">

@@ -6,15 +6,18 @@ from django.utils import timezone
 class Poll(models.Model):
     question = models.CharField(max_length=200)
     pub_date = models.DateTimeField('date published')
+    likes = models.IntegerField(default=0)
     def __unicode__(self):
         return self.question
     def was_published_recently(self):
         now = timezone.now()
         return now > self.pub_date >= now - datetime.timedelta(days=1)
+    def popularity(self):
+        numvotes = reduce(lambda y,z: y+z, map(lambda x: x.votes, self.choice_set.all()))
+        return ( self.likes * 5 ) + numvotes
     was_published_recently.admin_order_field = 'pub_date'
     was_published_recently.boolean = True
     was_published_recently.short_description = 'Published recently?'
-    likes = models.IntegerField(default=0)
 
 class Choice(models.Model):
     poll = models.ForeignKey(Poll)
