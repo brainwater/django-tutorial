@@ -3,6 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.core.urlresolvers import reverse
 from django.views import generic
 from django.utils import timezone
+from django.contrib.syndication.views import Feed
 
 from polls.models import Choice, Poll
 
@@ -28,6 +29,24 @@ class DetailView(generic.DetailView):
 class ResultsView(generic.DetailView):
     model = Poll
     template_name = 'polls/results.html'
+
+class MostPopularFeed(Feed):
+    title = "Most Popular Polls Feed"
+    link = "/polls/popular"
+    description = "Ten Most Popular Polls"
+    
+    def items(self):
+        objs = Poll.objects.all()
+        return sorted(objs, key=lambda x: 0 - x.popularity())[:10]
+
+    def item_title(self, item):
+        return item.question
+
+    def item_description(self, item):
+        return item.choices_string()
+
+    def item_link(self, item):
+        return reverse('polls:detail', args=(item.id,))
 
 def vote(request, poll_id):
     p = get_object_or_404(Poll, pk=poll_id)

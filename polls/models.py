@@ -15,6 +15,8 @@ class Poll(models.Model):
     def popularity(self):
         numvotes = reduce(lambda y,z: y+z, map(lambda x: x.votes, self.choice_set.all()))
         return ( self.likes * 5 ) + numvotes
+    def choices_string(self):
+        return ', '.join([str(str(choice) + ': %d' % choice.votes) for choice in self.choice_set.all()])
     was_published_recently.admin_order_field = 'pub_date'
     was_published_recently.boolean = True
     was_published_recently.short_description = 'Published recently?'
