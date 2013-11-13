@@ -2,8 +2,11 @@
 
 <ul>
 {% for choice in poll.choice_set.all %}
+{% if not choice.is_write_in %}
     <li>{{ choice.choice_text }} -- {{ choice.votes }} vote{{ choice.votes|pluralize }}</li>
+{% endif %}
 {% endfor %}
+	<li>Write In Choices -- {{ poll.num_write_in }}</li>
 </ul>
 
 <a href="{% url 'polls:detail' poll.id %}">Vote again?</a>

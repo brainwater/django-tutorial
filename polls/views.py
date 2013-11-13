@@ -60,7 +60,7 @@ def vote(request, poll_id):
         try: 
             selected_choice = p.choice_set.get(choice_text=post['other'])
         except (KeyError, Choice.DoesNotExist):
-            p.choice_set.create(choice_text=post['other'], votes=1)
+            p.choice_set.create(choice_text=post['other'], votes=1, is_write_in=True)
         else:
             selected_choice.votes += 1
             selected_choice.save()
