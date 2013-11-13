@@ -2,7 +2,7 @@
 
 <link rel="stylesheet" type="text/css" href="{% static 'polls/style.css' %}" />
 
-<a href "{% url 'polls:popular' %}">RSS Feed 10 Most Popular Polls</a>
+<a href="{% url 'polls:popular' %}">RSS Feed 10 Most Popular Polls</a>
 
 {% if latest_poll_list %}
     <ul>
