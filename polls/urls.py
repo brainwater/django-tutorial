@@ -8,5 +8,6 @@ urlpatterns = patterns('',
     url(r'^(?P<poll_id>\d+)/vote/$', views.vote, name='vote'),
     url(r'^(?P<poll_id>\d+)/like/$', views.like, name='like'),
     url(r'^(?P<poll_id>\d+)/likes/$', views.likes, name='likes'),
+    url(r'^(?P<poll_id>\d+)/popularity/$', views.popularity, name='popularity'),
     url(r'^popular$', views.MostPopularFeed(), name='popular'),
 )

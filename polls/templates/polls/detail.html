@@ -4,8 +4,7 @@
 <div id="numlikes">{{ poll.likes }} likes</div>
 <a href="javascript:DoPost()">like</a>
 <br/>
-popularity =
-{{ poll.popularity }}
+<div id="numpopularity">popularity = {{ poll.popularity }}</div>
 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
 
 <form action="{% url 'polls:vote' poll.id %}" method="post">
@@ -26,6 +25,9 @@ popularity =
       function( data1 ) {
           $.get( "{% url 'polls:likes' poll.id %}", function( data ) {
               $( "#numlikes" ).html( data + " likes" );
+          });
+          $.get( "{% url 'polls:popularity' poll.id %}", function( data ) {
+              $( "#numpopularity" ).html( "popularity = " + data );
           });
       });
    }

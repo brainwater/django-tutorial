@@ -85,3 +85,5 @@ def like(request, poll_id):
 
 def likes(request, poll_id):
     return HttpResponse(Poll.objects.get(pk=poll_id).likes)
+def popularity(request, poll_id):
+    return HttpResponse(Poll.objects.get(pk=poll_id).popularity())
