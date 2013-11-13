@@ -37,6 +37,7 @@ class MostPopularFeed(Feed):
     
     def items(self):
         objs = Poll.objects.all()
+        # Sort the list based on the negative popularity
         return sorted(objs, key=lambda x: 0 - x.popularity())[:10]
 
     def item_title(self, item):
@@ -67,14 +68,10 @@ def vote(request, poll_id):
         return HttpResponseRedirect(reverse('polls:results', args=(p.id,)))
 
 def like(request, poll_id):
-    print("hello1")
     p = get_object_or_404(Poll, pk=poll_id)
     if (request.method == "POST"):
-        print("hello")
         p.likes += 1
         p.save()
-    else:
-        print("bye")
     return render(request, 'polls/detail.html', { 'poll': p })
 
 def likes(request, poll_id):

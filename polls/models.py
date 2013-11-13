@@ -13,9 +13,11 @@ class Poll(models.Model):
         now = timezone.now()
         return now > self.pub_date >= now - datetime.timedelta(days=1)
     def popularity(self):
+        # Popularity is 5 times the number of likes plus the total number of votes
         numvotes = reduce(lambda y,z: y+z, map(lambda x: x.votes, self.choice_set.all()))
         return ( self.likes * 5 ) + numvotes
     def choices_string(self):
+        # List choices with votes separated by commas
         return ', '.join([str(str(choice) + ': %d' % choice.votes) for choice in self.choice_set.all()])
     was_published_recently.admin_order_field = 'pub_date'
     was_published_recently.boolean = True
