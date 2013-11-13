@@ -57,7 +57,13 @@ def vote(request, poll_id):
         selected_choice.votes += 1
         selected_choice.save()
     elif post.__contains__('other') and post['other']:
-        p.choice_set.create(choice_text=post['other'], votes=1)
+        try: 
+            selected_choice = p.choice_set.get(choice_text=post['other'])
+        except (KeyError, Choice.DoesNotExist):
+            p.choice_set.create(choice_text=post['other'], votes=1)
+        else:
+            selected_choice.votes += 1
+            selected_choice.save()
     else:
         # Redisplay the poll voting form.
         return render(request, 'polls/detail.html', {
