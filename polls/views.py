@@ -51,21 +51,24 @@ class MostPopularFeed(Feed):
 
 def vote(request, poll_id):
     p = get_object_or_404(Poll, pk=poll_id)
-    try:
+    post = request.POST
+    if post.__contains__('choice'):
         selected_choice = p.choice_set.get(pk=request.POST['choice'])
-    except (KeyError, Choice.DoesNotExist):
-        # Redisplay the poll voting form.
-        return render(request, 'polls/detail.html', {
-            'poll': p,
-            'error_message': "You didn't select a choice.",
-        })
-    else:
         selected_choice.votes += 1
         selected_choice.save()
-        # Always return an HttpResponseRedirect after successfully dealing
-        # with POST data. This prevents data from being posted twice if a
-        # user hits the Back button.
-        return HttpResponseRedirect(reverse('polls:results', args=(p.id,)))
+    elif post.__contains__('other') and post['other']:
+        p.choice_set.create(choice_text=post['other'], votes=1)
+    else:
+        # Redisplay the poll voting form.
+        return render(request, 'polls/detail.html', {
+                'poll': p,
+                'error_message': "You didn't select a choice.",
+        })
+    # Always return an HttpResponseRedirect after successfully dealing
+    # with POST data. This prevents data from being posted twice if a
+    # user hits the Back button. 
+    return HttpResponseRedirect(reverse('polls:results', args=(p.id,)))
+
 
 def like(request, poll_id):
     p = get_object_or_404(Poll, pk=poll_id)
