@@ -19,16 +19,26 @@
 </form>
 
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script src="http://cdn.jsdelivr.net/jquery.cookie/1.4.0/jquery.cookie.min.js"></script>
 <script>
    function DoPost(){
-      $.post( "{% url 'polls:like' poll.id %}", { csrfmiddlewaretoken: '{{ csrf_token }}' }, 
-      function( data1 ) {
-          $.get( "{% url 'polls:likes' poll.id %}", function( data ) {
-              $( "#numlikes" ).html( data + " likes" );
-          });
-          $.get( "{% url 'polls:popularity' poll.id %}", function( data ) {
-              $( "#numpopularity" ).html( "popularity = " + data );
-          });
-      });
+      isliked=$.cookie("liked{{ poll.id }}");
+      if (isliked==null || isliked=="")
+      {
+        $.cookie("liked{{ poll.id }}", "true");
+        $.post( "{% url 'polls:like' poll.id %}", { csrfmiddlewaretoken: '{{ csrf_token }}' }, 
+        function( data1 ) {
+            $.get( "{% url 'polls:likes' poll.id %}", function( data ) {
+                $( "#numlikes" ).html( data + " likes" );
+            });
+            $.get( "{% url 'polls:popularity' poll.id %}", function( data ) {
+                $( "#numpopularity" ).html( "popularity = " + data );
+            });
+        });
+      }
+      else
+      {
+         alert("Already liked poll");
+      }
    }
 </script>
